@@ -45,16 +45,10 @@
 		<table id = "tbleFlashcards">
 			<thead>
 				<tr>
-
-					<g:sortableColumn property="symbol"
-						title="${message(code: 'flashcard.symbol.label', default: 'Symbol')}" />
-
-					<g:sortableColumn property="pronunciation"
-						title="${message(code: 'flashcard.pronunciation.label', default: 'Pronunciation')}" />
-
-					<g:sortableColumn property="definition"
-						title="${message(code: 'flashcard.definition.label', default: 'Definition')}" />
-
+					<th>Symbol<th/>
+					<th>Pronunciation<th/>
+					<th>Definition<th/>
+					<th>Options</th>
 				</tr>
 			</thead>
 			<tbody>
