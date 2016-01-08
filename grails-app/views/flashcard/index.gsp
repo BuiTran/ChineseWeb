@@ -45,10 +45,9 @@
 		<table id = "tbleFlashcards">
 			<thead>
 				<tr>
-					<th>Symbol<th/>
-					<th>Pronunciation<th/>
-					<th>Definition<th/>
-					<th>Options</th>
+					<th>Symbol</th>
+					<th>Pronunciation</th>
+					<th>Definition</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -72,9 +71,7 @@
 				</g:each>
 			</tbody>
 		</table>
-		<div class="pagination">
-			<g:paginate total="${flashcardInstanceCount ?: 0}" />
-		</div>
+		
 	</div>
 </body>
 </html>

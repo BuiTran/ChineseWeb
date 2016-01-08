@@ -47,14 +47,11 @@
 			<thead>
 				<tr>
 
-					<g:sortableColumn property="lessonNo"
-						title="${message(code: 'lesson.lessonNo.label', default: 'Lesson No')}" />
+					<th>Lesson Number</th>
 
-					<g:sortableColumn property="lessonTitle"
-						title="${message(code: 'lesson.lessonTitle.label', default: 'Lesson Title')}" />
-
-					<g:sortableColumn property="courseCode"
-						title="${message(code: 'lesson.courseCode.label', default: 'Course Code')}" />
+					<th>Lesson Title</th>
+					
+					<th>Course Code</th>
 
 				</tr>
 			</thead>
@@ -78,9 +75,7 @@
 				</g:each>
 			</tbody>
 		</table>
-		<div class="pagination">
-			<g:paginate total="${lessonInstanceCount ?: 0}" />
-		</div>
+		
 	</div>
 </body>
 </html>
