@@ -26,6 +26,13 @@ class BootStrap {
 			c.courseCode=level+"A"
 			ablock.addToCourses(c).save(flush:true,failOnError:true)
 			c.save(flush:true,failOnError:true)
+			
+			(1..7).each{num->
+				Lesson l=new Lesson(lessonTitle:"${c.courseTitle}-${num}",lessonNo:"${c.courseCode}-${num}")
+				l.courseCode=c.courseCode
+				c.addToLessons(l).save(flush:true,failOnError:true)
+				l.save(flush:true,failOnError:true)
+			}
 		}
 		
 		list.each{level->
