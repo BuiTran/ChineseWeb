@@ -19,13 +19,6 @@
 	<g:textField name="lessonTitle" required="" value="${lessonInstance?.lessonTitle}"/>
 
 </div>
+<g:hiddenField name="courseId" value="${course?.id}"/>
 
-<div class="fieldcontain ${hasErrors(bean: lessonInstance, field: 'courseCode', 'error')} required">
-	<label for="courseCode">
-		<g:message code="lesson.courseCode.label" default="Course Code" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:textField name="courseCode" required="" value="${lessonInstance?.courseCode}"/>
-
-</div>
-
+ 

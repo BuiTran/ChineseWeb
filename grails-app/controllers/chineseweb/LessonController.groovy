@@ -1,5 +1,8 @@
 
 package chineseweb
+/**
+ * Controls all lessons 
+ */
 import grails.plugin.springsecurity.annotation.Secured
 
 
@@ -8,98 +11,96 @@ import grails.transaction.Transactional
 @Secured("ROLE_ADMIN")
 @Transactional(readOnly = true)
 class LessonController {
+	def show(Lesson lessonInstance) {
+		def course=lessonInstance.course
+		[lessonInstance:lessonInstance,course:course]
+	}
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+	def create(Course course) {
+		[lessonInstance: new Lesson(),course:course]
+	}
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Lesson.list(params), model:[lessonInstanceCount: Lesson.count()]
-    }
+	@Transactional
+	def save(Lesson lessonInstance) {
+		println lessonInstance
+		lessonInstance.properties=params
+		def course=Course.get(Long.parseLong(params.courseId))
+		course.addToLessons(lessonInstance)
+		if (lessonInstance == null) {
+			notFound()
+			return
+		}
 
-    def show(Lesson lessonInstance) {
-        respond lessonInstance
-    }
+		if (lessonInstance.hasErrors()) {
+			respond lessonInstance.errors, view:'create'
+			return
+		}
+		
+		course.addToLessons(lessonInstance).save(flush:true,failOnError:true)
+		lessonInstance.save flush:true,failOnError:true
 
-    def create() {
-        respond new Lesson(params)
-    }
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.created.message', args: [message(code: 'lesson.label', default: 'Lesson'), lessonInstance.id])
+				redirect lessonInstance
+			}
+			'*' { respond lessonInstance, [status: CREATED] }
+		}
+	}
 
-    @Transactional
-    def save(Lesson lessonInstance) {
-        if (lessonInstance == null) {
-            notFound()
-            return
-        }
+	def edit(Lesson lessonInstance) {
+		respond lessonInstance
+	}
 
-        if (lessonInstance.hasErrors()) {
-            respond lessonInstance.errors, view:'create'
-            return
-        }
+	@Transactional
+	def update(Lesson lessonInstance) {
+		if (lessonInstance == null) {
+			notFound()
+			return
+		}
 
-        lessonInstance.save flush:true
+		if (lessonInstance.hasErrors()) {
+			respond lessonInstance.errors, view:'edit'
+			return
+		}
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'lesson.label', default: 'Lesson'), lessonInstance.id])
-                redirect lessonInstance
-            }
-            '*' { respond lessonInstance, [status: CREATED] }
-        }
-    }
+		lessonInstance.save flush:true
 
-    def edit(Lesson lessonInstance) {
-        respond lessonInstance
-    }
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.updated.message', args: [message(code: 'Lesson.label', default: 'Lesson'), lessonInstance.id])
+				redirect lessonInstance
+			}
+			'*'{ respond lessonInstance, [status: OK] }
+		}
+	}
 
-    @Transactional
-    def update(Lesson lessonInstance) {
-        if (lessonInstance == null) {
-            notFound()
-            return
-        }
+	@Transactional
+	def delete(Lesson lessonInstance) {
 
-        if (lessonInstance.hasErrors()) {
-            respond lessonInstance.errors, view:'edit'
-            return
-        }
+		if (lessonInstance == null) {
+			notFound()
+			return
+		}
+		def courseId=lessonInstance.course.id
+		lessonInstance.delete flush:true
 
-        lessonInstance.save flush:true
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.deleted.message', args: [message(code: 'Lesson.label', default: 'Lesson'), lessonInstance.id])
+				redirect action:"show",controller:"course", id:"${courseId}", method:"GET"
+			}
+			'*'{ render status: NO_CONTENT }
+		}
+	}
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Lesson.label', default: 'Lesson'), lessonInstance.id])
-                redirect lessonInstance
-            }
-            '*'{ respond lessonInstance, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(Lesson lessonInstance) {
-
-        if (lessonInstance == null) {
-            notFound()
-            return
-        }
-
-        lessonInstance.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Lesson.label', default: 'Lesson'), lessonInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'lesson.label', default: 'Lesson'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
-    }
+	protected void notFound() {
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.not.found.message', args: [message(code: 'lesson.label', default: 'Lesson'), params.id])
+				redirect action: "index", method: "GET"
+			}
+			'*'{ render status: NOT_FOUND }
+		}
+	}
 }
