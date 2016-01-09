@@ -34,26 +34,25 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<!-- Jquery UI -->
-<asset:javascript src="jquery-ui.js" />
-<asset:stylesheet src="jquery-ui.css" />
-<asset:stylesheet src="jquery-ui.structure.css" />
-<asset:stylesheet src="jquery-ui.theme.css" />
-
 <!-- Custom assets -->
 <asset:stylesheet src="application.css" />
 
-<asset:javascript src="mainpage.js" />
+<!-- Jquery UI -->
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
 <g:layoutHead />
 </head>
 <body>
-	
+
 	<g:layoutBody />
 	<div class="footer" role="contentinfo"></div>
 	<div id="spinner" class="spinner" style="display: none;">
 		<g:message code="spinner.alt" default="Loading&hellip;" />
 	</div>
-	
+
 </body>
 
 <footer class="site-footer" role="contentinfo" itemscope="itemscope"
@@ -67,7 +66,7 @@
 						<div class="textwidget">
 							<p>
 								Copyright © 2015 - All rights reserved <span class="seperator">|</span>
-								Site by Tran Bui 
+								Site by Austin College
 							</p>
 						</div>
 					</div>

@@ -51,7 +51,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<g:each in="${flashcardInstanceList}" status="i"
+				<g:each in="${list}" status="i"
 					var="flashcardInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 

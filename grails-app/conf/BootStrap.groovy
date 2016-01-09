@@ -2,11 +2,14 @@ import chineseweb.*
 import chineseweb.security.*
 
 class BootStrap {
-
+	def nameList="Language History,Pronounciation,Grammer,Writing".split(",")
+	Random rand=new Random()
+	
     def init = { servletContext ->
 		
-		def f1 = new Flashcard(symbol: "ma", pronunciation: "ma", definition: "idk")
-		f1.save(flush: true)
+		("A".."Z").each{
+			def f1 = new Flashcard(symbol: it, pronunciation: it, definition: "idk").save(flush: true)
+		}
 		
 		
 		User ablock=new User(username:"ablock",password:"ablock").save(flush:true)

@@ -40,7 +40,7 @@ body {
 	background: #ffffff;
 	color: #333333;
 	margin: 0 auto;
-	max-width: 95%;
+	max-width: 960px;
 	overflow-x: hidden; /* prevents box-shadow causing a horizontal scrollbar in firefox when viewport < 960px wide */
 	   -moz-box-shadow: 0 0 0.3em #255b17;
 	-webkit-box-shadow: 0 0 0.3em #255b17;
@@ -49,9 +49,6 @@ body {
 
 #grailsLogo {
 	background-color: #abbf78;
-	padding:40px 30px;
-	font-size:40px;
-	font-weight:700
 }
 
 /* replace with .no-boxshadow body if you have modernizr available */
@@ -68,7 +65,7 @@ body {
 }
 
 a:link, a:visited, a:hover {
-	color: #48802c;
+	color: #2e4869;
 }
 
 a:hover, a:active {
@@ -76,7 +73,7 @@ a:hover, a:active {
 }
 
 h1 {
-	color: #48802c;
+	color: #2e4869;
 	font-weight: normal;
 	font-size: 1.25em;
 	margin: 0.8em 0 0.3em 0;
@@ -111,7 +108,7 @@ img {
 }
 
 .footer {
-	background: #abbf78;
+	background: #0b5ba1;
 	color: #000;
 	clear: both;
 	font-size: 0.8em;
@@ -479,7 +476,7 @@ th.desc a {
 }
 
 th:hover, tr:hover {
-	background: #E1F2B6;
+	background: #8eb2fa;
 }
 
 /* PAGINATION */
@@ -596,4 +593,17 @@ th:hover, tr:hover {
 a.skip {
 	position: absolute;
 	left: -9999px;
+}
+
+#panelNewStudent {
+	display: none;
+}
+#serviceFormPanel {
+	display: none;
+}
+#panelReportForm{
+	display: none;
+}
+#panelShowService{
+	display: none;
 }
