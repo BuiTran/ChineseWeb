@@ -92,7 +92,6 @@
 				<h2>Available Options</h2>
 				<ul>
 					<li class="controller"><a href="/ChineseWeb/flashcard/index">Flashcard List</a></li>
-					<li class="controller"><a href="/ChineseWeb/lesson/index">Lesson List</a></li>
 					<li class="controller"><a href="/ChineseWeb/course">Course List</a></li>
 				</ul>
 			</div>
