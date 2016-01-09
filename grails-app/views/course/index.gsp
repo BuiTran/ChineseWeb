@@ -86,7 +86,7 @@ $(function(){
 		});
 	$("#newCourse").click(function(){
 		$.ajax({
-			url : 'create',
+			url : 'course/create',
 			success: function(data, textStatus){
 				$("#courseDialog").html(data);
 				},
@@ -97,7 +97,7 @@ $(function(){
 	$(".editCourseIndex").click(function(){
 		var id=$(this).parents("td:first").prop("id");
 		$.ajax({
-			url:"edit/"+id,
+			url:"course/edit/"+id,
 			success:function(data,textStatus){
 				$("#courseDialog").html(data);
 				},

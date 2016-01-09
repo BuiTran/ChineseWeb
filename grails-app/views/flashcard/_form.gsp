@@ -29,12 +29,4 @@
 
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: flashcardInstance, field: 'lessons', 'error')} ">
-	<label for="lessons">
-		<g:message code="flashcard.lessons.label" default="Lessons" />
-		
-	</label>
-	<g:select name="lessons" from="${chineseweb.Lesson.list()}" multiple="multiple" optionKey="id" size="5" value="${flashcardInstance?.lessons*.id}" class="many-to-many"/>
-
-</div>
 
