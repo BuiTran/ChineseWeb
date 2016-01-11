@@ -61,6 +61,13 @@
 				</g:if>
 			
 			</ol>
+			
+			<g:form url="[resource:flashcardInstance, action:'delete']" method="DELETE">
+				<fieldset class="buttons">
+					<g:remoteLink class="edit" action="edit" controller="flashcard" update="show-flashcard" id="${flashcardInstance.id}">Edit</g:remoteLink>
+					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+				</fieldset>
+			</g:form>
 		</div>
 	</body>
 </html>

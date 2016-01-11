@@ -16,13 +16,14 @@ class LessonController {
 		[lessonInstance:lessonInstance,course:course]
 	}
 
-	def create(Course course) {
+	def create() {
+		println params.courseId
+		def course=Course.get(Long.parseLong(params.courseId))
 		[lessonInstance: new Lesson(),course:course]
 	}
 
 	@Transactional
 	def save(Lesson lessonInstance) {
-		println lessonInstance
 		lessonInstance.properties=params
 		def course=Course.get(Long.parseLong(params.courseId))
 		course.addToLessons(lessonInstance)

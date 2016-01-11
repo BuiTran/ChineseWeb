@@ -4,7 +4,6 @@ class Flashcard {
 	String symbol
 	String pronunciation
 	String definition
-	Long id
 	
 	static scaffolding = true
 	static belongsTo = Lesson
