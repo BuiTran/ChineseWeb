@@ -22,7 +22,7 @@
 			<li><a class="home" href="${createLink(uri: '/')}"><g:message
 						code="default.home.label" /></a></li>
 			<li><g:link class="list" controller="course" action="index">Course List</g:link></li>
-			<li><g:link controller="lesson" id="${course.id}" action="create" class="create">New Lesson</g:link></li>
+			<li><a id="newLesson" class="create">New Lesson</a></li>
 		</ul>
 	</div>
 	<!-- nav -->
@@ -88,9 +88,8 @@
 							<td><g:form controller="lesson" id="${lesson.id}"
 									method="DELETE">
 
-									<g:link class="edit" controller="lesson" action="edit" id=" ${lesson.id}">
-										<g:message code="default.button.edit.label" default="Edit" />
-									</g:link>
+									<input type="button" class="edit editLessonIndex" id="${lesson.id}" value="Edit">
+									
 									<g:actionSubmit class="delete" action="delete"
 										value="${message(code: 'default.button.delete.label', default: 'Delete')}"
 										onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
@@ -102,6 +101,8 @@
 				</tbody>
 			</table>
 		</g:if>
+
+		<div id="lessonDialogOnCourse"></div>
 
 		<!-- Edit or delete the course -->
 		<g:form url="[resource:course, action:'delete']" method="DELETE">
@@ -118,10 +119,41 @@
 
 
 	</div>
-	<g:javascript>
+	<script>
 			$(function() {
-				$('#tbleLessons').dataTable()
+				$('#tbleLessons').dataTable();
+				$("#lessonDialogOnCourse").dialog({
+						model:true,
+						width:"80%",
+						height:$(window).height()*0.8,
+						autoOpen:false	
+						});
+					$("#newLesson").click(function(){
+						$.ajax({
+							url : '/ChineseWeb/lesson/create',
+							data:{courseId:${course.id}},
+							success: function(data, textStatus){
+								$("#lessonDialogOnCourse").html(data);
+								$("#lessonDialogOnCourse").dialog("open");
+								},
+							error: function(XMLHttpRequest,textStatus,errorThrown){}
+							});
+						
+							});
+					$(".editLessonIndex").click(function(){
+						var id=$(this).prop("id");
+						$.ajax({
+							url:"/ChineseWeb/lesson/edit/"+id,
+							success:function(data,textStatus){
+								$("#lessonDialogOnCourse").html(data);
+								$("#lessonDialogOnCourse").dialog("open");
+								},
+							error:function(XMLHttpRequest,textStatus,errorThrown){}
+							
+							});
+						
+						});
 			})
-	</g:javascript>
+	</script>
 </body>
 </html>
