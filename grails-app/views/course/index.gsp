@@ -1,4 +1,4 @@
-
+ 
 <%@ page import="chineseweb.Course"%>
 <!DOCTYPE html>
 <html>

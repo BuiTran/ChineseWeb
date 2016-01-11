@@ -21,10 +21,12 @@
 		<div id="show-lesson" class="content scaffold-show" role="main">
 			<h1>${lessonInstance.lessonTitle }</h1>
 			
+			
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
 			
+			<div id="lessonInfor">
 			<ol class="property-list lesson">
 			
 				<g:if test="${lessonInstance?.lessonNo}">
@@ -42,9 +44,11 @@
 				</g:if>
 			
 			</ol>
+			</div>
+			
 			<g:form url="[resource:lessonInstance, action:'delete']" method="DELETE">
 				<fieldset class="buttons">
-					<g:link class="edit" action="edit" resource="${lessonInstance}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
+					<g:remoteLink class="edit" action="edit" controller="lesson" update="show-lesson" id="${lessonInstance.id}">Edit</g:remoteLink>
 					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 				</fieldset>
 			</g:form>
