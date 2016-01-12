@@ -21,7 +21,35 @@ class LessonController {
 		def course=Course.get(Long.parseLong(params.courseId))
 		[lessonInstance: new Lesson(),course:course]
 	}
-
+	def _tableFlashcard(){
+		def lId = params.lessonId as Long
+		def lessonInstance = Lesson.get(lId)
+		def flashcardInstanceList = Flashcard.list()
+		render view:'_tableFlashcard', model:[flashcardInstanceList: flashcardInstanceList, lessonInstance: lessonInstance]
+	}
+	
+	def addFlashcard(){
+		
+		def fId = params.flashcardId as Long
+		def lId = params.lessonId as Long
+		
+		def flashcardInstance = Flashcard.get(fId)
+		def lessonInstance = Lesson.get(lId)
+		lessonInstance.addToFlashcards(flashcardInstance).save(flush:true)
+		
+		render view:'_lessonFlashcard', model: [lessonInstance:lessonInstance]
+		
+	}
+	
+	def deleteFlashcard(){
+		def fId = params.flashcardId as Long
+		def lId = params.lessonId as Long
+		def flashcardInstance = Flashcard.get(fId)
+		def lessonInstance = Lesson.get(lId)
+		lessonInstance.removeFromFlashcards(flashcardInstance).save(flush:true)
+		
+		render view:'_lessonFlashcard', model: [lessonInstance:lessonInstance]
+	}
 	@Transactional
 	def save(Lesson lessonInstance) {
 		lessonInstance.properties=params
