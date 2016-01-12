@@ -9,7 +9,6 @@ import grails.transaction.Transactional
 @Secured("ROLE_ADMIN")
 class FlashcardController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -67,7 +66,7 @@ class FlashcardController {
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Flashcard.label', default: 'Flashcard'), flashcardInstance.id])
+                flash.message = "Flashcard ${flashcardInstance.symbol} is updated"
                 redirect flashcardInstance
             }
             '*'{ respond flashcardInstance, [status: OK] }
