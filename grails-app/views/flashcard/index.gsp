@@ -73,7 +73,7 @@
 		</table>
 
 	</div>
-	<div id="flashcardDialog"></div>
+	
 	<script>
 	
 $(function(){
@@ -94,7 +94,9 @@ $(function(){
 			});
 		$("#flashcardDialog").dialog("open");
 			});
-	$(".editFlashcardIndex").click(function(){
+	$("#tbleFlashcards").on("click",".editFlashcardIndex",
+			function(){
+		alert("pressed");
 		var id=$(this).parents("td:first").prop("id");
 		$.ajax({
 			url:"edit/"+id,
@@ -108,6 +110,6 @@ $(function(){
 		});
 });
 </script>
-
+<div id="flashcardDialog"></div>
 </body>
 </html>

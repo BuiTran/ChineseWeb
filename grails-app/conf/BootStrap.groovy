@@ -19,7 +19,7 @@ class BootStrap {
 		UserRole.create(mhiggs,admin,true)
 
 		/*Create courses for each user*/
-		def list=[110,120,210,310,410]
+		def list=[110,120,210,220,221,310,330,350,380,410,430,450,490]
 		
 		list.each{level->
 			Course c=randomCourse(level)
@@ -27,7 +27,7 @@ class BootStrap {
 			ablock.addToCourses(c).save(flush:true,failOnError:true)
 			c.save(flush:true,failOnError:true)
 			
-			(1..7).each{num->
+			(1..15).each{num->
 				Lesson l=new Lesson(lessonTitle:"${c.courseTitle}-${num}",lessonNo:"${c.courseCode}-${num}")
 				c.addToLessons(l).save(flush:true,failOnError:true)
 				l.save(flush:true,failOnError:true)
@@ -40,7 +40,7 @@ class BootStrap {
 			mhiggs.addToCourses(c).save(flush:true,failOnError:true)
 			c.save(flush:true,failOnError:true)
 			
-			(1..7).each{num->
+			(1..15).each{num->
 				Lesson l=new Lesson(lessonTitle:"${c.courseTitle}-${num}",lessonNo:"${c.courseCode}-${num}")
 				c.addToLessons(l).save(flush:true,failOnError:true)
 				l.save(flush:true,failOnError:true)
