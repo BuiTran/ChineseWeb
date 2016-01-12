@@ -31,7 +31,7 @@
 				${flash.message}
 			</div>
 		</g:if>
-		<table id = "tbleCourses">
+		<table id ="tableCourses">
 			<thead>
 				<tr>
 
@@ -77,7 +77,7 @@
 	<script>
 	
 $(function(){
-	$('#tbleCourses').dataTable();
+	$('#tableCourses').dataTable();
 	$("#courseDialog").dialog({
 		model:true,
 		width:"80%",
@@ -86,7 +86,7 @@ $(function(){
 		});
 	$("#newCourse").click(function(){
 		$.ajax({
-			url : 'course/create',
+			url : '/ChineseWeb/course/create',
 			success: function(data, textStatus){
 				$("#courseDialog").html(data);
 				},
@@ -94,10 +94,10 @@ $(function(){
 			});
 		$("#courseDialog").dialog("open");
 			});
-	$(".editCourseIndex").click(function(){
+	$("#tableCourses").on("click",".editCourseIndex",function(){
 		var id=$(this).parents("td:first").prop("id");
 		$.ajax({
-			url:"course/edit/"+id,
+			url:"/ChineseWeb/course/edit/"+id,
 			success:function(data,textStatus){
 				$("#courseDialog").html(data);
 				},

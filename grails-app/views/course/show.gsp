@@ -59,7 +59,7 @@
 
 		<!-- Lesson Table -->
 		<g:if test="${course?.lessons}">
-			<table id="tbleLessons">
+			<table id="tableLessons">
 
 				<thead>
 					<tr>
@@ -121,7 +121,7 @@
 	</div>
 	<script>
 			$(function() {
-				$('#tbleLessons').dataTable();
+				$('#tableLessons').dataTable();
 				$("#lessonDialogOnCourse").dialog({
 						model:true,
 						width:"80%",
@@ -140,7 +140,7 @@
 							});
 						
 							});
-					$(".editLessonIndex").click(function(){
+					$("#tableLessons").on("click",".editLessonIndex",function(){
 						var id=$(this).prop("id");
 						$.ajax({
 							url:"/ChineseWeb/lesson/edit/"+id,
