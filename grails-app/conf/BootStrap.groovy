@@ -31,6 +31,22 @@ class BootStrap {
 				Lesson l=new Lesson(lessonTitle:"${c.courseTitle}-${num}",lessonNo:"${c.courseCode}-${num}")
 				c.addToLessons(l).save(flush:true,failOnError:true)
 				l.save(flush:true,failOnError:true)
+				
+				5.each{
+					Question q=new Question(questionText:"Select the correct symbol")
+					l.addToQuestions(q).save(flush:true,failOnError:true)
+					q.save(flush:true,failOnError:true)
+					
+					("A".."C").each{ansNo->
+						Answer a=new Answer(correct:false,choice:ansNo)
+						q.addToAnswers(a).save(flush:true,failOnError:true)
+						a.save(flush:true,failOnError:true)
+					}
+					Answer d=new Answer(correct:true,choice:"D")
+					q.addToAnswers(d).save(flush:true,failOnError:true)
+					d.save(flush:true,failOnError:true)
+					
+				}
 			}
 		}
 		
