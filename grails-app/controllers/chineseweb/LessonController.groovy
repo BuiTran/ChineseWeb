@@ -97,7 +97,7 @@ class LessonController {
 
 		request.withFormat {
 			form multipartForm {
-				flash.message = message(code: 'default.updated.message', args: [message(code: 'Lesson.label', default: 'Lesson'), lessonInstance.id])
+				flash.message = "Lesson ${lessonInstance.lessonTitle} is updated"
 				redirect lessonInstance
 			}
 			'*'{ respond lessonInstance, [status: OK] }
@@ -116,7 +116,7 @@ class LessonController {
 
 		request.withFormat {
 			form multipartForm {
-				flash.message = message(code: 'default.deleted.message', args: [message(code: 'Lesson.label', default: 'Lesson'), lessonInstance.id])
+				flash.message = "Lesson ${lessonInstance.lessonTitle} is deleted"
 				redirect action:"show",controller:"course", id:"${courseId}", method:"GET"
 			}
 			'*'{ render status: NO_CONTENT }

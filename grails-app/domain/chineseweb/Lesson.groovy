@@ -5,7 +5,7 @@ class Lesson {
 	String lessonTitle
 	
 	static belongsTo = [course:Course]
-	static hasMany = [flashcards: Flashcard]
+	static hasMany = [flashcards: Flashcard, questions: Question]
 	static mapping = {
 		flashcards cascade: "save-update"
 	}
