@@ -63,7 +63,7 @@ grails.project.dependency.resolution = {
         compile ":asset-pipeline:1.9.9"
 		compile "org.grails.plugins:spring-security-core:2.0.0"
 		compile "org.grails.plugins:spring-security-oauth:2.1.0-RC4"
-		compile "org.grails.plugins:spring-security-oauth-google:0.3.1"
+		compile "org.grails.plugins:spring-security-oauth-google:0.3.1" 
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate4:4.3.6.1" // or ":hibernate:3.6.10.18"

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 		<div id="edit-course" class="content scaffold-edit" role="main">
-			<h1>Edit ${courseInstance.courseTitle}</h1>
+			<h1>Edit ${courseInstance.courseCode}</h1>
 			
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
@@ -16,7 +16,7 @@
 			</ul>
 			</g:hasErrors>
 			
-			<g:form controller="course" id="${courseInstance.id}" method="PUT" >
+			<g:form controller="course" id="${courseInstance.courseCode}" method="PUT" >
 				<g:hiddenField name="version" value="${courseInstance?.version}" />
 				<fieldset class="form">
 					<g:render template="form"/>

@@ -49,7 +49,7 @@
 				<g:each in="${list}" status="i" var="course">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
-						<td><g:link action="show" id="${course.id}">
+						<td><g:link action="show" id="${course.courseCode}">
 								${course.courseTitle}
 							</g:link></td>
 
@@ -57,8 +57,8 @@
 							${course.courseCode}
 						</td>
 
-						<td id="${course.id}">
-						<g:form controller="course" id="${course.id}">
+						<td id="${course.courseCode}">
+						<g:form controller="course" id="${course.courseCode}">
 						<input type="button" class="editCourseIndex" value="Edit"/><g:actionSubmit
 								class="delete" action="delete"
 								value="Delete"
@@ -97,6 +97,7 @@ $(function(){
 	$("#tableCourses").on("click",".editCourseIndex",function(){
 		var id=$(this).parents("td:first").prop("id");
 		$.ajax({
+			data:{courseId:id},
 			url:"/ChineseWeb/course/edit/"+id,
 			success:function(data,textStatus){
 				$("#courseDialog").html(data);

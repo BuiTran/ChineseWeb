@@ -10,7 +10,7 @@ import chineseweb.security.*
  *
  */
 @Transactional(readOnly = true)
-@Secured("ROLE_ADMIN")
+@Secured('ROLE_ADMIN')
 class CourseController {
 	def springSecurityService
 
@@ -64,6 +64,7 @@ class CourseController {
 		}
 
 		courseInstance.save flush:true
+		println courseInstance
 
 		request.withFormat {
 			form multipartForm {
@@ -80,6 +81,7 @@ class CourseController {
 	 * @return
 	 */
 	def edit(Course courseInstance) {
+		
 		[courseInstance: courseInstance]
 	}
 
@@ -106,7 +108,7 @@ class CourseController {
 		request.withFormat {
 			form multipartForm {
 				flash.message = "Course ${courseInstance.courseTitle} is updated."
-				redirect courseInstance
+				render view:"show",model:[course:courseInstance]
 			}
 			'*'{ respond courseInstance, [status: OK] }
 		}
@@ -144,7 +146,7 @@ class CourseController {
 	protected void notFound() {
 		request.withFormat {
 			form multipartForm {
-				flash.message = message(code: 'default.not.found.message', args: [message(code: 'course.label', default: 'Course'), params.id])
+				flash.message = message(code: 'default.not.found.message', args: [message(code: 'course.label', default: 'Course'), params.courseCode])
 				redirect action: "index", method: "GET"
 			}
 			'*'{ render status: NOT_FOUND }

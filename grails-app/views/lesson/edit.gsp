@@ -13,7 +13,7 @@
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:form url="[resource:lessonInstance, action:'update']" method="PUT" >
+			<g:form controller="lesson" id="${lessonInstance.lessonNo}" method="PUT" >
 				<g:hiddenField name="version" value="${lessonInstance?.version}" />
 				<fieldset class="form">
 					<g:render template="form"/>

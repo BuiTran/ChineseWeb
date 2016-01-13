@@ -25,7 +25,7 @@
 			<li><a class="home" href="${createLink(uri: '/')}"><g:message
 						code="default.home.label" /></a></li>
 			<li><g:link class="list" controller="course" action="show"
-					id="${course.id}">Lesson List</g:link></li>
+					id="${lessonInstance.course.courseCode}">Lesson List</g:link></li>
 		</ul>
 	</div>
 	<!-- nav -->
@@ -86,28 +86,10 @@
 									${fieldValue(bean: flashcardInstance, field: "definition")}
 								</td>
 
-								<td id="${flashcardInstance.id}"><g:form
-										controller="lesson" id="${flashcardInstance.id}">
+								<td id="${flashcardInstance.id}">
 
-										<input type="button" value="Remove"
-											onclick="
-											$.ajax({
-											type:'POST',
-												url:'/ChineseWeb/lesson/deleteFlashcard',
-									
-												data: {
-													lessonId: ${lessonInstance.id},
-													flashcardId: ${flashcardInstance.id}
-												},
-												success:function(data,textStatus){
-													jQuery('#tbleAjax').html(data);
-													},
-												error:function(XMLHttpRequest,textStatus,errorThrown){
-												}
-												
-											});
-											return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-									</g:form></td>
+										<input type="button" value="Remove" class="removeFlashcard" />
+									</td>
 
 							</tr>
 						</g:each>
@@ -116,22 +98,22 @@
 			</g:if>
 		</div>
 		<input
-			onclick="
+			onclick='
 			showAddFlashcardPanel();
 			jQuery.ajax({
-				type:'POST',
-				url:'/ChineseWeb/lesson/_tableFlashcard',
+				type:"POST",
+				url:"/ChineseWeb/lesson/_tableFlashcard",
 				data: {
-					lessonId: ${lessonInstance.id}
+					lessonId: "${lessonInstance.lessonNo}"
 				},
 				success:
 					function(data,textStatus){
-						jQuery('#panelAddFlashcard').html(data);
+						jQuery("#panelAddFlashcard").html(data);
 					},
 				error:
 					function(XMLHttpRequest,textStatus,errorThrown){
 					}});
-			return false"
+			return false'
 			type="button" class="create btn btn-default" value="Add Flashcard">
 
 		<div id="panelAddFlashcard"></div>
@@ -141,11 +123,12 @@
 			<br>
 		</div>
 
-		<g:form url="[resource:lessonInstance, action:'delete']"
+		<g:form controller="lesson" id="${lessonInstance.lessonNo}"
 			method="DELETE">
 			<fieldset class="buttons">
-				<g:remoteLink class="edit" action="edit" id="${lessonInstance.id }"
-					update="show-lesson" controller="lesson">
+				<g:remoteLink class="edit" action="edit"
+					id="${lessonInstance.lessonNo }" update="show-lesson"
+					controller="lesson">
 					<g:message code="default.button.edit.label" default="Edit" />
 				</g:remoteLink>
 				<g:actionSubmit class="delete" action="delete"
@@ -167,21 +150,31 @@
 			}
 			
 			$(function() {
+				var lessonId="${lessonInstance.lessonNo}";
+				
 				$('#tbleFlashcardsLesson').dataTable();
-				$(".editFlashcardIndex").click(function(){
-					var id=$(this).parents("td:first").prop("id");
+				
+				$("#tbleAjax").on("click",".removeFlashcard",function(){
+					var idString=$(this).parents("td:first").prop("id");
+					alert(idString);
 					$.ajax({
-						url:"edit/"+id,
-						success:function(data,textStatus){
-							$("#flashcardDialog").html(data);
+							type:"POST",
+							url:"/ChineseWeb/lesson/deleteFlashcard",
+											
+							data: {
+							lessonId: lessonId,
+							flashcardId: idString
 							},
-						error:function(XMLHttpRequest,textStatus,errorThrown){}
-						
+							success:function(data,textStatus){
+							jQuery("#tbleAjax").html(data);
+							},
+							error:function(XMLHttpRequest,textStatus,errorThrown){
+							}
+													
 						});
-					$("#flashcardDialog").dialog("open");
-					});
-			})
-			
+						return confirm("${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}");
+				});
+	});
 	</script>
 </body>
 </html>

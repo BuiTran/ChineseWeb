@@ -8,22 +8,19 @@ import grails.plugin.springsecurity.annotation.Secured
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
-@Secured("ROLE_ADMIN")
+@Secured('ROLE_ADMIN')
 @Transactional(readOnly = true)
 class LessonController {
 	def show(Lesson lessonInstance) {
-		def course=lessonInstance.course
-		[lessonInstance:lessonInstance,course:course]
+		[lessonInstance:lessonInstance]
 	}
 
 	def create() {
-		println params.courseId
-		def course=Course.get(Long.parseLong(params.courseId))
+		def course=Course.get(params.courseId)
 		[lessonInstance: new Lesson(),course:course]
 	}
 	def _tableFlashcard(){
-		def lId = params.lessonId as Long
-		def lessonInstance = Lesson.get(lId)
+		def lessonInstance = Lesson.get(params.lessonId)
 		def flashcardInstanceList = Flashcard.list()
 		render view:'_tableFlashcard', model:[flashcardInstanceList: flashcardInstanceList, lessonInstance: lessonInstance]
 	}
@@ -31,7 +28,7 @@ class LessonController {
 	def addFlashcard(){
 		
 		def fId = params.flashcardId as Long
-		def lId = params.lessonId as Long
+		def lId = params.lessonId
 		
 		def flashcardInstance = Flashcard.get(fId)
 		def lessonInstance = Lesson.get(lId)
@@ -43,7 +40,7 @@ class LessonController {
 	
 	def deleteFlashcard(){
 		def fId = params.flashcardId as Long
-		def lId = params.lessonId as Long
+		def lId = params.lessonId
 		def flashcardInstance = Flashcard.get(fId)
 		def lessonInstance = Lesson.get(lId)
 		lessonInstance.removeFromFlashcards(flashcardInstance).save(flush:true)
@@ -53,10 +50,10 @@ class LessonController {
 	@Transactional
 	def save(Lesson lessonInstance) {
 		lessonInstance.properties=params
-		def course=Course.get(Long.parseLong(params.courseId))
+		def course=Course.get(params.courseId)
 		course.addToLessons(lessonInstance)
 		if (lessonInstance == null) {
-			notFound()
+			notFound(lessonInstance)
 			return
 		}
 
@@ -65,13 +62,17 @@ class LessonController {
 			return
 		}
 		
+		println "before"+course.lessons.toList().size()
 		course.addToLessons(lessonInstance).save(flush:true,failOnError:true)
 		lessonInstance.save flush:true,failOnError:true
-
+		println "after"+course.lessons.toList().size()
+		println lessonInstance
+		
+		
 		request.withFormat {
 			form multipartForm {
-				flash.message = message(code: 'default.created.message', args: [message(code: 'lesson.label', default: 'Lesson'), lessonInstance.id])
-				redirect lessonInstance
+				flash.message = message(code: 'default.created.message', args: [message(code: 'lesson.label', default: 'Lesson'), lessonInstance.lessonNo])
+				 render view:"show",model:[lessonInstance:lessonInstance]
 			}
 			'*' { respond lessonInstance, [status: CREATED] }
 		}
@@ -84,7 +85,7 @@ class LessonController {
 	@Transactional
 	def update(Lesson lessonInstance) {
 		if (lessonInstance == null) {
-			notFound()
+			notFound(lessonInstance)
 			return
 		}
 
@@ -97,8 +98,8 @@ class LessonController {
 
 		request.withFormat {
 			form multipartForm {
-				flash.message = message(code: 'default.updated.message', args: [message(code: 'Lesson.label', default: 'Lesson'), lessonInstance.id])
-				redirect lessonInstance
+				flash.message = message(code: 'default.updated.message', args: [message(code: 'Lesson.label', default: 'Lesson'), lessonInstance.lessonNo])
+				 render view:"show",model:[lessonInstance:lessonInstance]
 			}
 			'*'{ respond lessonInstance, [status: OK] }
 		}
@@ -108,7 +109,7 @@ class LessonController {
 	def delete(Lesson lessonInstance) {
 
 		if (lessonInstance == null) {
-			notFound()
+			notFound(lessonInstance)
 			return
 		}
 		def courseId=lessonInstance.course.id
@@ -116,18 +117,18 @@ class LessonController {
 
 		request.withFormat {
 			form multipartForm {
-				flash.message = message(code: 'default.deleted.message', args: [message(code: 'Lesson.label', default: 'Lesson'), lessonInstance.id])
-				redirect action:"show",controller:"course", id:"${courseId}", method:"GET"
+				flash.message = "Lesson ${lessonInstance.lessonNo} is deleted"
+				redirect action:"show",controller:"course", id:"${lessonInstance.course.courseCode}", method:"GET"
 			}
 			'*'{ render status: NO_CONTENT }
 		}
 	}
 
-	protected void notFound() {
+	protected void notFound(Lesson lessonInstance) {
 		request.withFormat {
 			form multipartForm {
-				flash.message = message(code: 'default.not.found.message', args: [message(code: 'lesson.label', default: 'Lesson'), params.id])
-				redirect action: "index", method: "GET"
+				flash.message = "Lesson is not found"
+				redirect controller:"course",id:"${lessonInstance.course.courseCode}", action: "show", method: "GET"
 			}
 			'*'{ render status: NOT_FOUND }
 		}

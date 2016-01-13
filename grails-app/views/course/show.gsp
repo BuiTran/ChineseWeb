@@ -77,7 +77,7 @@
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
 							<td><g:link action="show" controller="lesson"
-									id="${lesson.id}">
+									id="${lesson.lessonNo}">
 									${lesson.lessonNo}
 								</g:link></td>
 
@@ -85,10 +85,10 @@
 								${lesson.lessonTitle}
 							</td>
 
-							<td><g:form controller="lesson" id="${lesson.id}"
+							<td><g:form controller="lesson" id="${lesson.lessonNo}"
 									method="DELETE">
 
-									<input type="button" class="edit editLessonIndex" id="${lesson.id}" value="Edit">
+									<input type="button" class="edit editLessonIndex" id="${lesson.lessonNo}" value="Edit">
 									
 									<g:actionSubmit class="delete" action="delete"
 										value="${message(code: 'default.button.delete.label', default: 'Delete')}"
@@ -105,10 +105,10 @@
 		<div id="lessonDialogOnCourse"></div>
 
 		<!-- Edit or delete the course -->
-		<g:form url="[resource:course, action:'delete']" method="DELETE">
+		<g:form controller="course" id="${course.courseCode}" method="DELETE">
 			<fieldset class="buttons">
 				<g:remoteLink class="edit" update="show-course" action="edit"
-					resource="${course}">
+					id="${course.courseCode}">
 					<g:message code="default.button.edit.label" default="Edit" />
 				</g:remoteLink>
 				<g:actionSubmit class="delete" action="delete"
@@ -131,7 +131,7 @@
 					$("#newLesson").click(function(){
 						$.ajax({
 							url : '/ChineseWeb/lesson/create',
-							data:{courseId:${course.id}},
+							data:{courseId:"${course.courseCode}"},
 							success: function(data, textStatus){
 								$("#lessonDialogOnCourse").html(data);
 								$("#lessonDialogOnCourse").dialog("open");
