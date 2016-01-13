@@ -5,7 +5,7 @@
 			<h1>Edit ${courseInstance.courseTitle}</h1>
 			
 			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
+			<div  id="courseEdit" class="message" role="status">${flash.message}</div>
 			</g:if>
 			
 			<g:hasErrors bean="${courseInstance}">

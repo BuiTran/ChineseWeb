@@ -90,25 +90,25 @@ class CourseController {
 	 * @return
 	 */
 	@Transactional
-	def update(Course courseInstance) {
-		if (courseInstance == null) {
+	def update(Course course) {
+		if (course == null) {
 			notFound()
 			return
 		}
 
-		if (courseInstance.hasErrors()) {
-			respond courseInstance.errors, view:'edit'
+		if (course.hasErrors()) {
+			render view:'show', model:[course:course, error:course.errors]
 			return
 		}
 
-		courseInstance.save flush:true
+		course.save flush:true
 
 		request.withFormat {
 			form multipartForm {
-				flash.message = "Course ${courseInstance.courseTitle} is updated."
-				redirect courseInstance
+				flash.message = "Course ${course.courseTitle} is updated."
+				redirect course
 			}
-			'*'{ respond courseInstance, [status: OK] }
+			'*'{ respond course, [status: OK] }
 		}
 	}
 
