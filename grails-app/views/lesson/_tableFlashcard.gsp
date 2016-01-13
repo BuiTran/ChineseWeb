@@ -3,7 +3,7 @@
 	
 $(function(){
 	$('#tbleFlashcards').dataTable();
-	$('.symbol').click(function(){
+	$('#tbleFlashcards').on("click",".symbol",function(){
 		var idString=$(this).prop('id');
 		$.ajax({
 			type:'POST',
@@ -11,7 +11,7 @@ $(function(){
 			url:'/ChineseWeb/lesson/addFlashcard',
 
 			data: {
-				lessonId: ${lessonInstance.id},
+				lessonId: "${lessonInstance.lessonNo}",
 				flashcardId: idString
 			},
 			success:function(data,textStatus){

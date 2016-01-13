@@ -1,10 +1,6 @@
-<script>
-$(function() {
-	$('#tbleFlashcardsLesson').dataTable();
-})
-</script>
+
 <g:if test="${lessonInstance?.flashcards}">
-	<table id="tbleFlashcardsLesson">
+	<table id="tbleLessonFlashcards">
 		<thead>
 			<tr>
 				<th>Symbol</th>
@@ -31,31 +27,40 @@ $(function() {
 						${fieldValue(bean: flashcardInstance, field: "definition")}
 					</td>
 
-					<td id="${flashcardInstance.id}"><g:form controller="lesson"
-							id="${flashcardInstance.id}">
+					<td id="${flashcardInstance.id}">
 
-							<input type="button" value="Remove"
-								onclick="
-											$.ajax({
-											type:'POST',
-												url:'/ChineseWeb/lesson/deleteFlashcard',
-									
-												data: {
-													lessonId: ${lessonInstance.id},
-													flashcardId: ${flashcardInstance.id}
-												},
-												success:function(data,textStatus){
-												jQuery('#tbleAjax').html(data);
-												},
-												error:function(XMLHttpRequest,textStatus,errorThrown){
-												}
-												
-											});
-											return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-						</g:form></td>
+						<input type="button" value="Remove" class="removeFlashcard" />
+					</td>
 
 				</tr>
 			</g:each>
 		</tbody>
 	</table>
+	
 </g:if>
+<script>
+$(function() {
+	$('#tbleLessonFlashcards').dataTable();
+	var lessonId="${lessonInstance.lessonNo}";
+	/*$("#tbleLessonFlashcards").on("click",".removeFlashcard",function(){
+		var idString=$(this).parents("td:first").prop("id");
+		alert(idString);
+		$.ajax({
+				type:"POST",
+				url:"/ChineseWeb/lesson/deleteFlashcard",
+								
+				data: {
+				lessonId: lessonId,
+				flashcardId: idString
+				},
+				success:function(data,textStatus){
+				jQuery("#tbleAjax").html(data);
+				},
+				error:function(XMLHttpRequest,textStatus,errorThrown){
+				}
+										
+			});
+			return confirm("${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}");
+	});*/
+});
+</script>
