@@ -96,7 +96,6 @@ $(function(){
 			});
 	$("#tbleFlashcards").on("click",".editFlashcardIndex",
 			function(){
-		alert("pressed");
 		var id=$(this).parents("td:first").prop("id");
 		$.ajax({
 			url:"edit/"+id,
