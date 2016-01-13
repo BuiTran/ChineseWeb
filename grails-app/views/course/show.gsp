@@ -27,7 +27,13 @@
 	</div>
 	<!-- nav -->
 
-
+	<g:hasErrors bean="${course}">
+	<ul class="errors" role="alert">
+		<g:eachError bean="${course}" var="error">
+		<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>>${error.field} has error</li>
+		</g:eachError>
+	</ul>
+	</g:hasErrors>
 
 	<div id="show-course" class="content scaffold-show" role="main">
 

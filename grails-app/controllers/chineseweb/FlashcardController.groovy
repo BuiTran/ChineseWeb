@@ -58,7 +58,7 @@ class FlashcardController {
         }
 
         if (flashcardInstance.hasErrors()) {
-            respond flashcardInstance.errors, view:'edit'
+            respond flashcardInstance.errors, view:'error'
             return
         }
 
@@ -85,7 +85,7 @@ class FlashcardController {
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Flashcard.label', default: 'Flashcard'), flashcardInstance.id])
+                flash.message = "Flashcard ${flashcardInstance.symbol} is deleted"
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }
