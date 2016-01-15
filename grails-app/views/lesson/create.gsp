@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 		<div id="create-lesson" class="content scaffold-create" role="main">
-			<h1><g:message code="default.create.label" args="[entityName]" /></h1>
+			<h1>Create Lesson ${lessonNo}</h1>
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
@@ -15,6 +15,7 @@
 			<g:form controller="lesson" id="${lessonInstance.id}" >
 				<fieldset class="form">
 					<g:render template="form"/>
+					<g:hiddenField name="lessonNo" value="${lessonNo}"/>
 				</fieldset>
 				<fieldset class="buttons">
 					<g:actionSubmit name="create" action="save" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />

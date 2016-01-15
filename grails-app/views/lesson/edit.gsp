@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 		<div id="edit-lesson" class="content scaffold-edit" role="main">
-			<h1>Edit ${lessonInstance.lessonTitle}</h1>
+			<h1>Edit Lesson ${lessonInstance.lessonNo}</h1>
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>

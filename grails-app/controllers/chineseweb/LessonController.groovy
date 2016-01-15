@@ -17,9 +17,9 @@ class LessonController {
 	}
 
 	def create() {
-		println params.courseId
 		def course=Course.get(Long.parseLong(params.courseId))
-		[lessonInstance: new Lesson(),course:course]
+		def lessonNo=course.lessons.size()+1
+		[lessonInstance: new Lesson(),course:course,lessonNo:lessonNo]
 	}
 	def _tableFlashcard(){
 		def lId = params.lessonId as Long
