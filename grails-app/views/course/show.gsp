@@ -82,13 +82,14 @@
 					<g:each in="${course.lessons}" status="i" var="lesson">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
+							<td>
+									${lesson.lessonNo}
+								</td>
+
 							<td><g:link action="show" controller="lesson"
 									id="${lesson.id}">
-									${lesson.lessonNo}
-								</g:link></td>
-
-							<td>
 								${lesson.lessonTitle}
+								</g:link>
 							</td>
 
 							<td><g:form controller="lesson" id="${lesson.id}"

@@ -2,7 +2,7 @@ import chineseweb.*
 import chineseweb.security.*
 
 class BootStrap {
-	def nameList="Language History,Pronounciation,Grammer,Writing".split(",")
+	def nameList="Language History,Pronunciation,Grammar,Writing".split(",")
 	Random rand=new Random()
 	
     def init = { servletContext ->
@@ -28,12 +28,12 @@ class BootStrap {
 			c.save(flush:true,failOnError:true)
 			
 			(1..15).each{num->
-				Lesson l=new Lesson(lessonTitle:"${c.courseTitle}-${num}",lessonNo:"${c.courseCode}-${num}")
+				Lesson l=new Lesson(lessonTitle:"${c.courseTitle}-${num}",lessonNo:num)
 				c.addToLessons(l).save(flush:true,failOnError:true)
 				l.save(flush:true,failOnError:true)
 				
-				5.each{
-					Question q=new Question(questionText:"Select the correct symbol")
+				(1..5).each{questionNo->
+					Question q=new Question(questionText:"Select the correct symbol",questionNo:questionNo)
 					l.addToQuestions(q).save(flush:true,failOnError:true)
 					q.save(flush:true,failOnError:true)
 					
@@ -57,7 +57,7 @@ class BootStrap {
 			c.save(flush:true,failOnError:true)
 			
 			(1..15).each{num->
-				Lesson l=new Lesson(lessonTitle:"${c.courseTitle}-${num}",lessonNo:"${c.courseCode}-${num}")
+				Lesson l=new Lesson(lessonTitle:"${c.courseTitle}-${num}",lessonNo:num)
 				c.addToLessons(l).save(flush:true,failOnError:true)
 				l.save(flush:true,failOnError:true)
 			}

@@ -10,97 +10,128 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class QuestionController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+	def list(Lesson lessonInstance ) {
+		def list=lessonInstance.questions.toList()
+		[list:list,lessonInstance:lessonInstance]
+	}
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Question.list(params), model:[questionInstanceCount: Question.count()]
-    }
+	def show(Question questionInstance) {
+		[questionInstance:questionInstance]
+	}
 
-    def show(Question questionInstance) {
-        respond questionInstance
-    }
+	def create() {
+		def lessonInstance=Lesson.get(params.lessonId)
+		int questionNo=lessonInstance.questions.size()+1
+		(1..5).each{
+			Answer a = new Answer(choice:"A",correct:false)
 
-    def create() {
-        respond new Question(params)
-    }
 
-    @Transactional
-    def save(Question questionInstance) {
-        if (questionInstance == null) {
-            notFound()
-            return
-        }
+		}
+		[questionInstance:new Question(),lessonInstance:lessonInstance,questionNo:questionNo]
+	}
 
-        if (questionInstance.hasErrors()) {
-            respond questionInstance.errors, view:'create'
-            return
-        }
+	@Transactional
+	def save(Question questionInstance) {
+		def lessonInstance=Lesson.get(params.lesson)
+		lessonInstance.addToQuestions(questionInstance)
+		if (questionInstance == null) {
+			notFound()
+			return
+		}
 
-        questionInstance.save flush:true
+		if (questionInstance.hasErrors()) {
+			respond questionInstance.errors, view:'create',model:[questionInstance:questionInstance,lessonInstance:lessonInstance]
+			return
+		}
+		lessonInstance.addToQuestions(questionInstance).save(flush:true,failOnError:true)
+		questionInstance.save flush:true
+		
+		
+		(1..5).each{
+			print params."${it}"
+			if(params."${it}".compareTo("")){
+				Answer a=new Answer(choice:params."${it}",correct:false)
+				if(it.toString() in params.correct){
+					print it + " correct answer"
+					a.correct = true
+				}
+				questionInstance.addToAnswers(a).save flush:true,failOnError:true
+				a.save flush:true,failOnError:true
+			}
+		}
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'question.label', default: 'Question'), questionInstance.id])
-                redirect questionInstance
-            }
-            '*' { respond questionInstance, [status: CREATED] }
-        }
-    }
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.created.message', args: [message(code: 'question.label', default: 'Question'), questionInstance.id])
+				render view:"show",model:[questionInstance:questionInstance]
+			}
+			'*' { respond questionInstance, [status: CREATED] }
+		}
+	}
 
-    def edit(Question questionInstance) {
-        respond questionInstance
-    }
+	def edit(Question questionInstance) {
+		[questionInstance:questionInstance]
+	}
 
-    @Transactional
-    def update(Question questionInstance) {
-        if (questionInstance == null) {
-            notFound()
-            return
-        }
+	@Transactional
+	def update(Question questionInstance) {
+		if (questionInstance == null) {
+			notFound()
+			return
+		}
 
-        if (questionInstance.hasErrors()) {
-            respond questionInstance.errors, view:'edit'
-            return
-        }
+		if (questionInstance.hasErrors()) {
+			respond questionInstance.errors, view:'edit'
+			return
+		}
 
-        questionInstance.save flush:true
+		questionInstance.save flush:true
+		questionInstance.answers.each{
+			def idString=it.id
+			it.choice = params."${idString}"
+			it.correct = false
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Question.label', default: 'Question'), questionInstance.id])
-                redirect questionInstance
-            }
-            '*'{ respond questionInstance, [status: OK] }
-        }
-    }
+		}
 
-    @Transactional
-    def delete(Question questionInstance) {
+		params.correct.each{
+			Answer.get(it).correct = true
+		}
 
-        if (questionInstance == null) {
-            notFound()
-            return
-        }
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.updated.message', args: [message(code: 'Question.label', default: 'Question'), questionInstance.id])
+				render view:"show",model:[questionInstance:questionInstance]
+			}
+			'*'{ respond questionInstance, [status: OK] }
+		}
+	}
 
-        questionInstance.delete flush:true
+	@Transactional
+	def delete(Question questionInstance) {
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Question.label', default: 'Question'), questionInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
+		if (questionInstance == null) {
+			notFound()
+			return
+		}
 
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'question.label', default: 'Question'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
-    }
+		questionInstance.delete flush:true
+
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.deleted.message', args: [message(code: 'Question.label', default: 'Question'), questionInstance.id])
+				redirect action:"list", method:"GET"
+			}
+			'*'{ render status: NO_CONTENT }
+		}
+	}
+
+	protected void notFound() {
+		request.withFormat {
+			form multipartForm {
+				flash.message = message(code: 'default.not.found.message', args: [message(code: 'question.label', default: 'Question'), params.id])
+				redirect action: "list", method: "GET"
+			}
+			'*'{ render status: NOT_FOUND }
+		}
+	}
 }

@@ -26,6 +26,7 @@
 						code="default.home.label" /></a></li>
 			<li><g:link class="list" controller="course" action="show"
 					id="${course.id}">Lesson List</g:link></li>
+			<li><g:link controller="question" id="${lessonInstance.id}" action="list">Quiz Questions</g:link></li>
 		</ul>
 	</div>
 	<!-- nav -->
@@ -33,7 +34,12 @@
 
 	<div id="show-lesson" class="content scaffold-show" role="main">
 		<h1>
+			<g:if test="${lessonInstance?.lessonNo}">
+			Lesson ${lessonInstance.lessonNo}  
+			</g:if>
+			<g:if test="${lessonInstance?.lessonTitle}">
 			${lessonInstance.lessonTitle }
+			</g:if>
 		</h1>
 
 		<g:if test="${flash.message}">
@@ -41,22 +47,7 @@
 				${flash.message}
 			</div>
 		</g:if>
-
-		<ol class="property-list lesson">
-
-			<g:if test="${lessonInstance?.lessonNo}">
-				<li class="fieldcontain">Lesson Number: ${lessonInstance.lessonNo}
-
-				</li>
-			</g:if>
-
-			<g:if test="${lessonInstance?.lessonTitle}">
-				<li class="fieldcontain">Lesson Title: ${lessonInstance.lessonTitle}
-
-				</li>
-			</g:if>
-
-		</ol>
+		<br/>
 		<div id="tbleAjax">
 			<g:if test="${lessonInstance?.flashcards}">
 				<table id="tbleFlashcardsLesson">

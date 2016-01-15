@@ -122,8 +122,8 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'chineseweb.securi
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'chineseweb.security.UserRole'
 grails.plugin.springsecurity.authority.className = 'chineseweb.security.Role'
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-	'/':                ['permitAll'],
-	'/index':           ['permitAll'],
+	'/':                ['ROLE_ADMIN'],
+	'/index':           ['ROLE_ADMIN'],
 	'/index.gsp':       ['permitAll'],
 	'/assets/**':       ['permitAll'],
 	'/**/js/**':        ['permitAll'],
