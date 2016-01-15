@@ -18,7 +18,7 @@ class QuestionControllerSpec extends Specification {
     void "Test the index action returns the correct model"() {
 
         when:"The index action is executed"
-            controller.index()
+            controller.list()
 
         then:"The model is correct"
             !model.questionInstanceList

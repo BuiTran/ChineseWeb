@@ -1,7 +1,7 @@
 package chineseweb
 
 class Lesson {
-	String lessonNo
+	int lessonNo
 	String lessonTitle
 	
 	static belongsTo = [course:Course]
@@ -11,7 +11,7 @@ class Lesson {
 	}
 	
     static constraints = {
-		lessonNo nullable: false
-		lessonTitle nullable: false
+		lessonNo nullable: false, blank:false
+		lessonTitle nullable: false,blank:false
     }
 }

@@ -41,7 +41,7 @@
 			}
 
 			#page-body {
-				margin: 2em 1em 1.25em 18em;
+				margin: 0em 3em 3em 3em;
 			}
 
 			h2 {
@@ -63,6 +63,8 @@
 				line-height: 1.3;
 				list-style-position: inside;
 				margin: 0.25em 0;
+				font-size:18px;
+				font-weight:600
 			}
 
 			@media screen and (max-width: 480px) {
@@ -84,12 +86,7 @@
 		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		
 		<div id="page-body" role="main">
-			<h1>Austin College Chinese Web</h1>
-			<p>Web for administrators to manage the database
-			  </p>
-
 			<div id="controller-list" role="navigation">
-				<h2>Available Options</h2>
 				<ul>
 					<li class="controller"><a href="/ChineseWeb/flashcard/index">Flashcard List</a></li>
 					<li class="controller"><a href="/ChineseWeb/course">Course List</a></li>
