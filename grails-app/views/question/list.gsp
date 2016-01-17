@@ -24,53 +24,27 @@
 		</div>
 		
 		<div id="list-question" class="content scaffold-list" role="main">
-			<h1>Quiz Questions</h1>
-			<br/>
-			<g:if test="${flash.message}">
-				<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<table id="questionTable">
-			<thead>
-					<tr>
-					
-						<th>No. </th>
-						<th>Question</th>
-						<th></th>
-					
-					</tr>
-				</thead>
-				<tbody>
-				<g:each in="${list}" status="i" var="questionInstance">
-					<tr id="${questionInstance.id}" class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td>${questionInstance.questionNo}</td>
-						<td><a class="showQuestion">${questionInstance.questionText}</a></td>
-						<td>
-							<g:form url="[resource:questionInstance, action:'delete']"
-			method="DELETE">
-			
-				<input type="button" value="Edit" class="editQuestion"/>
-				<g:actionSubmit class="delete" action="delete"
-					value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-					onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-			
-		</g:form>
-						</td>
-					</tr>
-				</g:each>
-				</tbody>
-			</table>
+			<g:render template="refreshList"/>
 		</div>
 		<div id="questionDialog">
 		</div>
 		<script>
 		$(function(){
-			$("#questionTable").dataTable();
 			$("#questionDialog").dialog({
 				model:true,
 				width:"80%",
 				height:$(window).height()*0.8,
-				autoOpen:false	
+				autoOpen:false,
+				close:function(event,ui){
+					var id="${lessonInstance.id}";
+					$.ajax({
+						url:"/ChineseWeb/question/_refreshList/"+id,
+						success:function(data,textStatus){
+								$("#list-question").html(data);
+							},
+						error:function(XMLHttpRequest,textStatus,errorThrown){}
+						});
+					}
 				});
 			$("#new-question").click(function(){
 				$.ajax({
@@ -83,28 +57,7 @@
 					});
 				$("#questionDialog").dialog("open");
 				});
-			$("#questionTable").on("click",".editQuestion",function(){
-				var id=$(this).parents("tr:first").prop("id");
-				$.ajax({
-					url:"/ChineseWeb/question/edit/"+id,
-					success:function(data,textStatus){
-							$("#questionDialog").html(data);
-						},
-					error:function(XMLHttpRequest,textStatus,errorThrown){}
-					});
-				$("#questionDialog").dialog("open");
-				});
-			$("#questionTable").on("click",".showQuestion",function(){
-				var id=$(this).parents("tr:first").prop("id");
-				$.ajax({
-					url:"/ChineseWeb/question/show/"+id,
-					success:function(data,textStatus){
-							$("#questionDialog").html(data);
-						},
-					error:function(XMLHttpRequest,textStatus,errorThrown){}
-					});
-				$("#questionDialog").dialog("open");
-				});
+			
 			});
 	</script>
 	</body>

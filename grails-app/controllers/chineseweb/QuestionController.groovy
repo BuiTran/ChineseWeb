@@ -10,7 +10,23 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class QuestionController {
 
+	def index(){
+		def list=Question.list()
+		[list:list]
+	}
+	
+	def _refreshIndexList(){
+		def list=Question.list()
+		[list:list]
+	}
+	
 	def list(Lesson lessonInstance ) {
+		def list=lessonInstance.questions.toList()
+		[list:list,lessonInstance:lessonInstance]
+	}
+	
+	def _refreshList(Lesson lessonInstance){
+		println "refresh"
 		def list=lessonInstance.questions.toList()
 		[list:list,lessonInstance:lessonInstance]
 	}
@@ -45,13 +61,12 @@ class QuestionController {
 		}
 		lessonInstance.addToQuestions(questionInstance).save(flush:true,failOnError:true)
 		questionInstance.save flush:true
-		
-		
+
+
 		(1..5).each{
-			print params."${it}"
 			if(params."${it}".compareTo("")){
 				Answer a=new Answer(choice:params."${it}",correct:false)
-				if(it.toString() in params.correct){
+				if(it.toString() in params.correctChecked){
 					print it + " correct answer"
 					a.correct = true
 				}
@@ -62,7 +77,7 @@ class QuestionController {
 
 		request.withFormat {
 			form multipartForm {
-				flash.message = message(code: 'default.created.message', args: [message(code: 'question.label', default: 'Question'), questionInstance.id])
+				flash.message = "Question ${questionInstance.questionNo} is created"
 				render view:"show",model:[questionInstance:questionInstance]
 			}
 			'*' { respond questionInstance, [status: CREATED] }
@@ -70,7 +85,8 @@ class QuestionController {
 	}
 
 	def edit(Question questionInstance) {
-		[questionInstance:questionInstance]
+		def position=params.position
+		[questionInstance:questionInstance,position:position]
 	}
 
 	@Transactional
@@ -85,29 +101,92 @@ class QuestionController {
 			return
 		}
 
-		questionInstance.save flush:true
-		questionInstance.answers.each{
-			def idString=it.id
-			it.choice = params."${idString}"
-			it.correct = false
+		questionInstance.save flush:true,failOnError:true
 
-		}
+		def answerList=[]
 
-		params.correct.each{
-			Answer.get(it).correct = true
-		}
-
-		request.withFormat {
-			form multipartForm {
-				flash.message = message(code: 'default.updated.message', args: [message(code: 'Question.label', default: 'Question'), questionInstance.id])
-				render view:"show",model:[questionInstance:questionInstance]
+		/*
+		 * Update previous answers and move empty answers to the answerList
+		 */
+		questionInstance.answers.each{answer->
+			def idString=answer.id
+			if(params."${idString}"==""){
+				println "empty"
+				answerList.add(answer)
+			}else{
+				answer.choice = params."${idString}"
+				answer.correct = false
+				answer.save(flush:true)
 			}
-			'*'{ respond questionInstance, [status: OK] }
 		}
+
+		/*
+		 *Remove empty answers
+		 */
+		answerList.each{
+			questionInstance.removeFromAnswers(it)
+			deleteAnswer(it)
+		}
+
+		/*
+		 * Determine correct answers
+		 */
+		if(params.correct.getClass()==String){
+			def correctAnswer=Answer.get(params.correct)
+			if(correctAnswer!=null){
+				correctAnswer.correct=true
+				correctAnswer.save(flush:true,failOnError:true)
+			}
+		}else{
+			params.correct.each{
+				if(Answer.get(it)!=null){
+					Answer.get(it).correct = true
+					Answer.get(it).save(flush:true,failOnError:true)
+				}
+			}
+		}
+
+
+		/*
+		 *Add new Answers
+		 */
+		if(params.newAnswer.getClass()==String){
+			println params.newAnswerCorrect
+			def content=params.newAnswer
+			if(content!=""){
+				Answer a=new Answer(choice:content,correct:false)
+				if(params.newAnswerCorrect!=null){
+					a.correct=true;
+				}
+				questionInstance.addToAnswers(a).save(flush:true,failOnError:true)
+				a.save(flush:true,failOnError:true)
+				
+			}
+		}else if(params.newAnswer==null){}
+		else{
+			println params.newAnswerCorrect
+			for(int i=0;i<params.newAnswer.size();i++){
+				if(params.newAnswer[i]!=""){
+					Answer a=new Answer(choice:params.newAnswer[i],correct:false)
+					if(i.toString() in params.newAnswerCorrect){
+						a.correct=true;
+					}
+					questionInstance.addToAnswers(a).save(flush:true,failOnError:true)
+					a.save(flush:true,failOnError:true)
+				}
+			}
+		}
+
+		
+		flash.message = "Question ${questionInstance.questionNo} is updated"
+		render view:"show",model:[questionInstance:questionInstance]
+
+
 	}
 
 	@Transactional
 	def delete(Question questionInstance) {
+		def lessonInstance=Lesson.get(params.lessonId)
 
 		if (questionInstance == null) {
 			notFound()
@@ -118,12 +197,44 @@ class QuestionController {
 
 		request.withFormat {
 			form multipartForm {
-				flash.message = message(code: 'default.deleted.message', args: [message(code: 'Question.label', default: 'Question'), questionInstance.id])
-				redirect action:"list", method:"GET"
+				flash.message = "Question ${questionInstance.questionNo} is deleted."
+				def list=lessonInstance.questions.toList()
+				render view:"list",model:[list:list,lessonInstance:lessonInstance]
 			}
 			'*'{ render status: NO_CONTENT }
 		}
 	}
+	
+	@Transactional
+	def deleteOnIndex(Question questionInstance) {
+		def lessonInstance=Lesson.get(params.lessonId)
+
+		if (questionInstance == null) {
+			notFound()
+			return
+		}
+
+		questionInstance.delete flush:true
+
+		request.withFormat {
+			form multipartForm {
+				flash.message = "Question ${questionInstance.questionNo} is deleted."
+				def list=Question.list()
+				render view:"index",model:[list:list]
+			}
+			'*'{ render status: NO_CONTENT }
+		}
+	}
+
+	def deleteAnswer(Answer answerInstance) {
+		if (answerInstance == null) {
+			println "not found"
+			notFound()
+			return
+		}
+		answerInstance.delete flush:true
+	}
+
 
 	protected void notFound() {
 		request.withFormat {
@@ -133,5 +244,23 @@ class QuestionController {
 			}
 			'*'{ render status: NOT_FOUND }
 		}
+	}
+
+	def addAnswer(){
+		Question q=Question.get(params.questionId)
+		if(q.answers.size()<5){
+			Answer a=new Answer(choice:"Input Text",correct:false)
+			q.addToAnswers(a).save(flush:true,failOnError:true)
+			a.save(flush:true,failOnError:true)
+			println a.id
+			render view:"_form",model:[answerInstance:a]
+		}else{
+			render "No more than 5 answers"
+		}
+	}
+
+	def _addAnswer(){
+		def newAnswer=params.newAnswer
+		render view:"addAnswer",model:[newAnswer:newAnswer]
 	}
 }

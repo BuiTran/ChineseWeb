@@ -24,13 +24,14 @@
 		</ul>
 	</div>
 	<div id="list-course" class="content scaffold-list" role="main">
-		<h1>Course Table</h1>
+		<h1 class="pageTitle">Course Table</h1>
 
 		<g:if test="${flash.message}">
 			<div class="message" role="status">
 				${flash.message}
 			</div>
 		</g:if>
+		<hr/><br/>
 		<table id ="tableCourses">
 			<thead>
 				<tr>
