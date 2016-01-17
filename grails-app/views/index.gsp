@@ -88,8 +88,9 @@
 		<div id="page-body" role="main">
 			<div id="controller-list" role="navigation">
 				<ul>
-					<li class="controller"><a href="/ChineseWeb/flashcard/index">Flashcard List</a></li>
-					<li class="controller"><a href="/ChineseWeb/course">Course List</a></li>
+					<li class="controller"><g:link controller="course" action="index">Course List</g:link></li>
+					<li class="controller"><g:link controller="flashcard" action="index">Flashcard List</g:link></li>
+					<li class="controller"><g:link controller="question" action="index">Question List</g:link></li>
 				</ul>
 			</div>
 		</div>

@@ -50,6 +50,7 @@ class LessonController {
 		
 		render view:'_lessonFlashcard', model: [lessonInstance:lessonInstance]
 	}
+	
 	@Transactional
 	def save(Lesson lessonInstance) {
 		lessonInstance.properties=params
