@@ -620,3 +620,10 @@ a.skip {
     font-size: 20px;
     padding-top: 10px;
 }
+#logOutBar{
+	background-color:#0B5BA1;
+}
+#logOutButton{
+	color:#E6E5E5;
+	font-weight:700;
+}
