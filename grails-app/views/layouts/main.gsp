@@ -46,6 +46,13 @@
 <g:layoutHead />
 </head>
 <body>
+	<sec:ifLoggedIn>
+	<fieldset class="buttons" id="logOutBar">
+		<g:form controller="logout" method="POST" style="text-align:right">
+		<g:actionSubmit id="logOutButton" action="index" value="Log Out"/>
+		</g:form>
+		</fieldset>
+	</sec:ifLoggedIn>
 	<div id="mainTitle"> ChiLingual Administration
 	<p>Web for administrators to manage the database
 			  </p>

@@ -41,7 +41,7 @@
 			}
 
 			#page-body {
-				margin: 0em 3em 3em 3em;
+				margin: 0em 3em 10em 3em;
 			}
 
 			h2 {
