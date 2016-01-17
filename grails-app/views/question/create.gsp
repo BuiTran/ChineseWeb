@@ -39,7 +39,7 @@
 			<label for="choice">
 				<g:message code="answer.choice.label" default="Choice" />
 			 </label> <g:textField name="${answer}" value=""/>
-			<g:checkBox name="correct" value="${i}" checked="false"/>
+			<label  style="margin-left:15px;width:inherit">Correct: </label><g:checkBox name="correctChecked" value="${answer}" checked="false"/>
 			</div>
 			</g:each>
 			

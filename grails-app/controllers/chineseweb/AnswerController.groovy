@@ -76,21 +76,14 @@ class AnswerController {
 
     @Transactional
     def delete(Answer answerInstance) {
-
+		println "delete get called"
         if (answerInstance == null) {
+			println "not found"
             notFound()
             return
         }
-
+		println "delete"
         answerInstance.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Answer.label', default: 'Answer'), answerInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
     }
 
     protected void notFound() {

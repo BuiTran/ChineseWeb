@@ -37,9 +37,30 @@
 		</g:if>
 			
 		</ol>
+		<br>
 		
-		
-	
+			<fieldset class="buttons">
+				<a class="editQuestionOnShow" id="${questionInstance.id}">
+					<g:message code="default.button.edit.label" default="Edit" />
+				</a>
+				<g:hiddenField name="lessonId" value="${questionInstance.lesson.id}"/>
+			</fieldset>
 	</div>
+<script>
+$(function(){
+	$(".editQuestionOnShow").click(function(){
+		var id=$(this).prop("id");
+		var position=$("#show-question").parents("div.ui-dialog-content").prop("id");
+		$.ajax({
+			url:"/ChineseWeb/question/edit/"+id,
+			data:{position:position},
+			success:function(data,textStatus){
+					$("#show-question").html(data);
+				},
+				error:function(XMLHttpRequest,textStatus,errorThrwon){}
+			});
+		});
+});
+</script>
 
 </html>
