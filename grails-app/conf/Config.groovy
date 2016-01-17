@@ -133,19 +133,5 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/dbconsole/**':    ['permitAll']
 ]
 
-// Added by the Spring Security OAuth plugin:
-grails.plugin.springsecurity.oauth.domainClass = 'chineseweb.security.OAuthID'
 
-oauth {
-	providers {
-	  google {
-		api = org.scribe.builder.api.GoogleApi
-		key = 'oauth_google_key'
-		secret = 'oauth_google_secret'
-		successUri = '/oauth/google/success'
-		failureUri = '/oauth/google/error'
-		callback = "${baseURL}/oauth/google/callback"
-		scope = 'https://www.googleapis.com/auth/userinfo.email'
-	  }
-	}
-  }
+
