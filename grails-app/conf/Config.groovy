@@ -124,7 +124,7 @@ grails.plugin.springsecurity.authority.className = 'chineseweb.security.Role'
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/':                ['ROLE_ADMIN'],
 	'/index':           ['ROLE_ADMIN'],
-	'/index.gsp':       ['permitAll'],
+	'/index.gsp':       ['ROLE_ADMIN'],
 	'/assets/**':       ['permitAll'],
 	'/**/js/**':        ['permitAll'],
 	'/**/css/**':       ['permitAll'],
