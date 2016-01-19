@@ -31,12 +31,12 @@ $(function() {
 						${fieldValue(bean: flashcardInstance, field: "definition")}
 					</td>
 
-					<td id="${flashcardInstance.id}"><g:form controller="lesson"
-							id="${flashcardInstance.id}">
-
-							<input type="button" value="Remove"
-								onclick="
-											$.ajax({
+					<td id="${flashcardInstance.id}"><input type="button"
+						value="Remove"
+						onclick="
+											result =  confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');
+											if (result){
+												$.ajax({
 											type:'POST',
 												url:'/ChineseWeb/lesson/deleteFlashcard',
 									
@@ -45,14 +45,14 @@ $(function() {
 													flashcardId: ${flashcardInstance.id}
 												},
 												success:function(data,textStatus){
-												jQuery('#tbleAjax').html(data);
-												},
+													jQuery('#tbleAjax').html(data);
+													},
 												error:function(XMLHttpRequest,textStatus,errorThrown){
 												}
 												
 											});
-											return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-						</g:form></td>
+											}" />
+					</td>
 
 				</tr>
 			</g:each>

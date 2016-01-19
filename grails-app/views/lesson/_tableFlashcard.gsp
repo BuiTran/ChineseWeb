@@ -3,7 +3,7 @@
 	
 $(function(){
 	$('#tbleFlashcards').dataTable();
-	$('.symbol').click(function(){
+	$('#tbleFlashcards').on("click",".symbol", function(){
 		var idString=$(this).prop('id');
 		$.ajax({
 			type:'POST',
