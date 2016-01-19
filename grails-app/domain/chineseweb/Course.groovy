@@ -9,7 +9,7 @@ class Course {
 		courseCode(blank:false,nullable:false,unique:true)
 	}
 
-	static hasMany=[lessons:Lesson]
+	static hasMany=[lessons:Lesson, verificationCodes: VerificationCode]
 	static belongsTo=[user:chineseweb.security.User]
 
 }
