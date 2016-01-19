@@ -17,7 +17,14 @@ class BootStrap {
 		Role admin=new Role(authority:"ROLE_ADMIN",enabled:true).save(flush:true)
 		UserRole.create(ablock,admin,true)
 		UserRole.create(mhiggs,admin,true)
-
+		
+		Student tran = new Student(firstName:"Tran", lastName:"Bui", studentEmail:"tbui13@austincollege.edu")
+		Student renata = new Student(firstName:"Renata", lastName:"Chai", studentEmail:"zchai13@austincollege.edu")
+		
+		tran.save(flush:true, failOnError:true)
+		renata.save(flush:true, failOnError:true)
+		
+		
 		/*Create courses for each user*/
 		def list=[110,120,210,220,221,310,330,350,380,410,430,450,490]
 		
@@ -26,6 +33,19 @@ class BootStrap {
 			c.courseCode=level+"A"
 			ablock.addToCourses(c).save(flush:true,failOnError:true)
 			c.save(flush:true,failOnError:true)
+			
+			VerificationCode vT = randomVerificationCode()
+			VerificationCode vR = randomVerificationCode()
+			
+			vT.setStudent(tran)
+			vR.setStudent(renata)
+			
+			vT.setCourse(c)
+			vR.setCourse(c)
+			
+			vT.save(flush:true, failOnError:true)
+			vR.save(flush:true, failOnError:true)
+			
 			
 			(1..15).each{num->
 				Lesson l=new Lesson(lessonTitle:"${c.courseTitle}-${num}",lessonNo:num)
@@ -71,6 +91,14 @@ class BootStrap {
 		Course c=new Course()
 		c.courseTitle=nameList.getAt(rand.nextInt(nameList.size()))+num.toString()
 		return c
+	}
+	
+	def randomVerificationCode(){
+		VerificationCode v = new VerificationCode()
+		Random randy = new Random()
+		def x = (1+randy.nextInt(8) * 1000000) + (randy.nextInt(9)*100000) + (randy.nextInt(9)*10000) + (randy.nextInt(9)*1000) + (randy.nextInt(9)*100) + (randy.nextInt(9)*10) + (randy.nextInt(9))
+		v.code = x.toString()
+		return v
 	}
 	
 	
