@@ -26,7 +26,8 @@
 						code="default.home.label" /></a></li>
 			<li><g:link class="list" controller="course" action="show"
 					id="${course.id}">Lesson List</g:link></li>
-			<li><g:link controller="question" id="${lessonInstance.id}" action="list">Quiz Questions</g:link></li>
+			<li><g:link controller="question" id="${lessonInstance.id}"
+					action="list">Quiz Questions</g:link></li>
 		</ul>
 	</div>
 	<!-- nav -->
@@ -35,10 +36,10 @@
 	<div id="show-lesson" class="content scaffold-show" role="main">
 		<h1>
 			<g:if test="${lessonInstance?.lessonNo}">
-			Lesson ${lessonInstance.lessonNo}  
+			Lesson ${lessonInstance.lessonNo}
 			</g:if>
 			<g:if test="${lessonInstance?.lessonTitle}">
-			${lessonInstance.lessonTitle }
+				${lessonInstance.lessonTitle }
 			</g:if>
 		</h1>
 
@@ -47,7 +48,7 @@
 				${flash.message}
 			</div>
 		</g:if>
-		<br/>
+		<br />
 		<div id="tbleAjax">
 			<g:if test="${lessonInstance?.flashcards}">
 				<table id="tbleFlashcardsLesson">
@@ -77,12 +78,13 @@
 									${fieldValue(bean: flashcardInstance, field: "definition")}
 								</td>
 
-								<td id="${flashcardInstance.id}"><g:form
-										controller="lesson" id="${flashcardInstance.id}">
-
+								<td id="${flashcardInstance.id}">
 										<input type="button" value="Remove"
 											onclick="
-											$.ajax({
+											result =  confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');
+											if (result){
+												alert('Press Yes');
+												$.ajax({
 											type:'POST',
 												url:'/ChineseWeb/lesson/deleteFlashcard',
 									
@@ -97,8 +99,8 @@
 												}
 												
 											});
-											return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-									</g:form></td>
+											}" />
+									</td>
 
 							</tr>
 						</g:each>
