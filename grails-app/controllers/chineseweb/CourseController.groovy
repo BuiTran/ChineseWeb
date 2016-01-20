@@ -41,23 +41,6 @@ class CourseController {
 		[courseInstance:c]
 	}
 
-	def showEnrolledStudents(Course course){
-		[course:course]
-	}
-	
-	def removeCode(Course course){
-		def verCodeId = params.verCodeId as Long
-		VerificationCode verificationCode = VerificationCode.get(verCodeId)
-		Student student = verificationCode.student
-		
-		verificationCode.setStudent(null)
-		verificationCode.setCourse(null)
-		verificationCode.delete(flush:true, failOnError:true)
-		
-		course.save(flush:true, failOnError:true)
-		render view:"_tbleStudents", model:[course:course]
-	}
-	
 	/**
 	 * Save a created course
 	 * @param courseInstance
