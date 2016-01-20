@@ -3,15 +3,19 @@ package chineseweb
 
 
 import static org.springframework.http.HttpStatus.*
+import chineseweb.security.User
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
 
 @Secured("ROLE_ADMIN")
 @Transactional(readOnly = true)
 class QuestionController {
-
+	def springSecurityService
 	def index(){
-		def list=Question.list()
+		User user=springSecurityService.currentUser
+		def list=Question.list().findAll{
+			it.lesson.course.user==user
+		}
 		[list:list]
 	}
 	
